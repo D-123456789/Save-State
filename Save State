@@ -1,0 +1,99 @@
+wait(3)
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+
+local character
+local HRP
+local Save_State_Part
+local Saved_Stated = false
+local TeleportCount = 0
+local CanTeleport = true
+
+-- Setup GUI only once
+local ScreenMobile = Instance.new("ScreenGui")
+ScreenMobile.Name = "MobileTeleportGui"
+ScreenMobile.ResetOnSpawn = false
+ScreenMobile.Parent = player:WaitForChild("PlayerGui")
+
+local SaveMobile = Instance.new("TextButton")
+SaveMobile.Size = UDim2.new(0.15, 0, 0.1, 0)
+SaveMobile.Position = UDim2.new(0.83,0,0.5,0)
+SaveMobile.BackgroundColor = BrickColor.new("Ghost grey")
+SaveMobile.BorderSizePixel = 3
+SaveMobile.TextScaled = true
+SaveMobile.Text = "Save State"
+SaveMobile.Parent = ScreenMobile
+
+local SaveMobile2 = Instance.new("TextButton")
+SaveMobile2.Position = UDim2.new(0.83,0,0.36,0)
+SaveMobile2.BackgroundColor = BrickColor.new("Ghost grey")
+SaveMobile2.BorderSizePixel = 3
+SaveMobile2.Size = UDim2.new(0.15,0,0.1,0)
+SaveMobile2.TextScaled = true
+SaveMobile2.Text = "TP State"
+SaveMobile2.Parent = ScreenMobile
+
+-- Save State Function
+local function saveState()
+	if not HRP then return end
+	if Saved_Stated then return end
+
+	Saved_Stated = true
+
+	Save_State_Part = Instance.new("Part")
+	Save_State_Part.Parent = workspace
+	Save_State_Part.Rotation = Vector3.new(0, 0, 90)
+	Save_State_Part.Size = Vector3.new(0.2, 4.3, 4.3)
+	Save_State_Part.Anchored = true
+	Save_State_Part.Color = Color3.new(0.133333, 1, 0)
+	Save_State_Part.Transparency = 0.5
+	Save_State_Part.Position = HRP.Position + Vector3.new(0, -2.5, 0)
+	Save_State_Part.CanCollide = false
+	Save_State_Part.Shape = Enum.PartType.Cylinder
+	Save_State_Part.Material = Enum.Material.Neon
+end
+
+-- Teleport Function
+local function teleportToState()
+	if not Saved_Stated or not Save_State_Part or not character then return end
+
+	TeleportCount += 1
+	character:MoveTo(Save_State_Part.Position)
+	Save_State_Part:Destroy()
+	Save_State_Part = nil
+	Saved_Stated = false
+
+	if TeleportCount >= 9999 then
+		CanTeleport = false
+	end
+end
+
+-- Keybinds (only once)
+UIS.InputBegan:Connect(function(input, processed)
+	if processed then return end
+	if not character or not HRP then return end
+
+	if input.KeyCode == Enum.KeyCode.F then
+		saveState()
+	elseif input.KeyCode == Enum.KeyCode.G then
+		teleportToState()
+	end
+end)
+
+-- Button binds (only once)
+SaveMobile.MouseButton1Click:Connect(saveState)
+SaveMobile2.MouseButton1Click:Connect(teleportToState)
+
+-- Character Handling
+local function onCharacterAdded(char)
+	character = char
+	HRP = char:WaitForChild("HumanoidRootPart")
+end
+
+-- Setup character
+if player.Character then
+	onCharacterAdded(player.Character)
+end
+
+player.CharacterAdded:Connect(onCharacterAdded)

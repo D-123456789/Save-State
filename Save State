@@ -1,4 +1,5 @@
 -- Save State script
+-- Update v2
 -- Mobile Friendly
 wait(2)
 -- Character finding Varibles
@@ -11,7 +12,6 @@ local Previewation = false
 local Save_State_Part
 local Saved_Stated = false
 local HRP = character:WaitForChild("HumanoidRootPart")
-local TeleportCount = 0
 local CanTeleport = true
 -- Sound variables | The save state sound
 local Sound = Instance.new("Sound")
@@ -23,6 +23,16 @@ local Sound2 = Instance.new("Sound")
 Sound2.Parent = game.SoundService
 Sound2.SoundId = "rbxassetid://3140269034"
 Sound2.Volume = 10
+-- #3 | PC Sound
+local Sound3 = Instance.new("Sound")
+Sound3.Parent = game.SoundService
+Sound3.SoundId = "rbxassetid://18996974946"
+Sound3.Volume = 10
+-- #4 | Mobile Sound
+local Sound4 = Instance.new("Sound")
+Sound4.Parent = game.SoundService
+Sound4.SoundId = "rbxassetid://138721734757982"
+Sound4.Volume = 10
 -- If HRP is true then works
 if HRP then
 	print("Hrp" .. " - Client")
@@ -35,71 +45,135 @@ local ScreenMobile = Instance.new("ScreenGui")
 ScreenMobile.Parent = player:WaitForChild("PlayerGui")
 ScreenMobile.Enabled = true
 ScreenMobile.ResetOnSpawn = false
--- Saving State button
-local SaveMobile = Instance.new("TextButton")
-SaveMobile.Parent = ScreenMobile
-SaveMobile.Size = UDim2.new(0.15, 0, 0.1, 0)
-SaveMobile.Position = UDim2.new(0.83,0,0.5,0)
-SaveMobile.BackgroundColor = BrickColor.new("Ghost grey")
-SaveMobile.BorderSizePixel = 3
-SaveMobile.TextScaled = true
-SaveMobile.Text = "Save State"
--- Teleporting to saved state button
-local SaveMobile2 = Instance.new("TextButton")
-SaveMobile2.Parent = ScreenMobile
-SaveMobile2.Position = UDim2.new(0.83,0,0.36,0)
-SaveMobile2.BackgroundColor = BrickColor.new("Ghost grey")
-SaveMobile2.BorderSizePixel = 3
-SaveMobile2.Size = UDim2.new(0.15,0,0.1,0)
-SaveMobile2.TextScaled = true
-SaveMobile2.Text = "TP State"
--- Save State button
-SaveMobile.MouseButton1Click:Connect(function()
-	Saved_Stated = true
-	if Saved_Stated then
-		-- The save state viewer function
-		Sound2:Play()
-		Save_State_Part = Instance.new("Part")
-		Save_State_Part.Parent = workspace
-		Save_State_Part.Rotation = Vector3.new(0,0,90)
-		Save_State_Part.Size = Vector3.new(0.01,4.3,4.3)
-		Save_State_Part.Anchored = true
-		Save_State_Part.Color = Color3.new(0.133333, 1, 0)
-		Save_State_Part.Transparency = 0.5
-		Save_State_Part.Position = HRP.Position + Vector3.new(0,-3,0)
-		Save_State_Part.CanCollide = false
-		Save_State_Part.Shape = "Cylinder"
-		Save_State_Part.Material = "Neon"
-	end
+-- The title for this script
+local TitleTP = Instance.new("TextLabel")
+TitleTP.Size = UDim2.new(1,0,0.05,0)
+TitleTP.Position = UDim2.new(0,0,-0.08,0)
+TitleTP.Parent = ScreenMobile
+TitleTP.BackgroundTransparency = 0.3
+TitleTP.BorderSizePixel = 0
+TitleTP.Text = "Save state script!!11!! (Dont spam!!1!)"
+TitleTP.TextScaled = true
+task.delay(1, function()
+	game.TweenService:Create(TitleTP, TweenInfo.new(1, Enum.EasingStyle.Linear), {Transparency = 1}):Play()
 end)
--- Teleport State Buttom
-SaveMobile2.MouseButton1Click:Connect(function()
-	-- State teleporter function
-	TeleportCount += 1
-	character:PivotTo(CFrame.new(Save_State_Part.Position + Vector3.new(0,3.99,0)))
-	Save_State_Part.Parent = nil
-	Save_State_Part:Destroy()
-	Save_State_Part = nil
-	Saved_Stated = false
-	Sound:Play()
-	-- Not needed. Should delete this
-	print("Teleport Count is " .. TeleportCount .. " - Client")
-	if TeleportCount == 999999 then
-		print("No more teleport. Limit is: " .. TeleportCount .. " - Client")
-		CanTeleport = false
-	end
+task.delay(2, function()
+	TitleTP:Destroy()
 end)
--- F key Save State
-UIS.InputBegan:Connect(function(input, proc)
-	if input.KeyCode == Enum.KeyCode.F and not Saved_Stated and CanTeleport then
+local function onCharacterAdded(char)
+	character = char
+	HRP = char:WaitForChild("HumanoidRootPart")
+end
+-- Checks if the player is on mobile or pc to save memory on pc to mobile functions.
+if game.UserInputService.KeyboardEnabled and game.UserInputService.MouseEnabled and not game.UserInputService.TouchEnabled then
+	task.spawn(function()
+		while task.wait(0.0001) do
+			print("The loop started")
+			if character.Humanoid.Health == 0 then
+				-- sets new Charatcer
+				if player.Character then
+					onCharacterAdded(player.Character)
+				end
+			end
+		end
+	end)
+	wait(1)
+	print("Pc user")
+	Sound3:Play()
+	-- F key Save State
+	UIS.InputBegan:Connect(function(input, proc)
+		if input.KeyCode == Enum.KeyCode.F and not Saved_Stated and CanTeleport then
+			Saved_Stated = true
+			if Saved_Stated then
+				-- F key part.
+				Sound2:Play()
+				Save_State_Part = Instance.new("Part")
+				Save_State_Part.Parent = workspace
+				Save_State_Part.Rotation = Vector3.new(0,0,90)
+				Save_State_Part.Size = Vector3.new(2048,4.3,4.3)
+				Save_State_Part.Anchored = true
+				Save_State_Part.Color = Color3.new(0.133333, 1, 0)
+				Save_State_Part.Transparency = 0.5
+				Save_State_Part.Position = HRP.Position + Vector3.new(0,-3,0)
+				Save_State_Part.CanCollide = false
+				Save_State_Part.Shape = "Cylinder"
+				Save_State_Part.Material = "Neon"
+			end
+		end
+		-- G key Teleport State
+		if input.KeyCode == Enum.KeyCode.G and Saved_Stated and CanTeleport then
+			-- G key Part
+			if HRP.Anchored == true then
+				print("No")
+			end
+			Sound:Play()
+			character:PivotTo(CFrame.new(Save_State_Part.Position + Vector3.new(0,3.99,0)))
+			Save_State_Part.Parent = nil
+			Save_State_Part:Destroy()
+			Save_State_Part = nil
+			Saved_Stated = false
+			Sound:Play()
+		end
+	end)
+elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.MouseEnabled and game.UserInputService.TouchEnabled then
+	wait(1)
+	print("Mobile User")
+	Sound4:Play()
+	-- Frame for buttons
+	local FrameTp = Instance.new("Frame")
+	FrameTp.Parent = ScreenMobile
+	FrameTp.Size = UDim2.new(0.3,0,0.3,0)
+	FrameTp.Position = UDim2.new(1,0,0.23,0)
+	FrameTp.BackgroundColor3 = Color3.fromRGB(126, 126, 126)
+	FrameTp.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	local FrameTpcorner = Instance.new("UIStroke")
+	FrameTpcorner.Parent = FrameTp
+	FrameTpcorner.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	FrameTpcorner.Thickness = 6
+	FrameTpcorner.LineJoinMode = Enum.LineJoinMode.Bevel
+	game.TweenService:Create(FrameTp, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Position = FrameTp.Position + UDim2.new(-0.19,0,0,0)}):Play()
+	-- Saving State button
+	local SaveMobile = Instance.new("TextButton")
+	SaveMobile.Parent = FrameTp
+	SaveMobile.Size = UDim2.new(0.5, 0, 0.35, 0)
+	SaveMobile.Position = UDim2.new(0.05,0,0.1,0)
+	SaveMobile.BackgroundColor = BrickColor.new("Silver")
+	SaveMobile.TextScaled = true
+	SaveMobile.Text = "Save State"
+	SaveMobile.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+	SaveMobile.TextStrokeTransparency = 0
+	SaveMobile.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+	local SaveMobileCorner = Instance.new("UIStroke")
+	SaveMobileCorner.Parent = SaveMobile
+	SaveMobileCorner.Thickness = 6
+	SaveMobileCorner.ApplyStrokeMode =Enum.ApplyStrokeMode.Border
+	SaveMobileCorner.LineJoinMode = Enum.LineJoinMode.Bevel
+	-- Teleporting to saved state button
+	local SaveMobile2 = Instance.new("TextButton")
+	SaveMobile2.Parent = FrameTp
+	SaveMobile2.Position = UDim2.new(0.05,0,0.6,0)
+	SaveMobile2.BackgroundColor = BrickColor.new("Silver")
+	SaveMobile2.Size = UDim2.new(0.5, 0, 0.35, 0)
+	SaveMobile2.TextScaled = true
+	SaveMobile2.Text = "TP State"
+	SaveMobile2.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+	SaveMobile2.TextStrokeTransparency = 0
+	SaveMobile2.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+	local SaveMobileCorner2 = Instance.new("UIStroke")
+	SaveMobileCorner2.Parent = SaveMobile2
+	SaveMobileCorner2.Thickness = 6
+	SaveMobileCorner2.ApplyStrokeMode =Enum.ApplyStrokeMode.Border
+	SaveMobileCorner2.LineJoinMode = Enum.LineJoinMode.Bevel
+	-- Save State button
+	SaveMobile.MouseButton1Click:Connect(function()
 		Saved_Stated = true
 		if Saved_Stated then
-			-- F key part.
+			-- The save state viewer function
 			Sound2:Play()
 			Save_State_Part = Instance.new("Part")
 			Save_State_Part.Parent = workspace
 			Save_State_Part.Rotation = Vector3.new(0,0,90)
-			Save_State_Part.Size = Vector3.new(0.01,4.3,4.3)
+			Save_State_Part.Size = Vector3.new(2048,4.3,4.3)
 			Save_State_Part.Anchored = true
 			Save_State_Part.Color = Color3.new(0.133333, 1, 0)
 			Save_State_Part.Transparency = 0.5
@@ -108,37 +182,40 @@ UIS.InputBegan:Connect(function(input, proc)
 			Save_State_Part.Shape = "Cylinder"
 			Save_State_Part.Material = "Neon"
 		end
-	end
-	-- G key Teleport State
-	if input.KeyCode == Enum.KeyCode.G and Saved_Stated and CanTeleport then
-		-- G key Part
-		if HRP.Anchored == true then
-			print("No")
+		-- Teleport State Buttom
+		SaveMobile2.MouseButton1Click:Connect(function()
+			-- State teleporter function
+			character:PivotTo(CFrame.new(Save_State_Part.Position + Vector3.new(0,3.99,0)))
+			Save_State_Part.Parent = nil
+			Save_State_Part:Destroy()
+			Save_State_Part = nil
+			Saved_Stated = false
+			Sound:Play()
+			-- sets new Charatcer
+			if player.Character then
+				onCharacterAdded(player.Character)
+			end
+		end)
+	end)
+	task.spawn(function()
+		while task.wait(0.0001) do
+			print("The check loop started - Mobile")
+			if character.Humanoid.Health == 0 then
+				-- sets new Charatcer
+				if player.Character then
+					onCharacterAdded(player.Character)
+				end
+				-- Mobile End :)
+			end
 		end
-		Sound:Play()
-		TeleportCount += 1
-		character:PivotTo(CFrame.new(Save_State_Part.Position + Vector3.new(0,3.99,0)))
-		Save_State_Part.Parent = nil
-		Save_State_Part:Destroy()
-		Save_State_Part = nil
-		Saved_Stated = false
-		Sound:Play()
-		-- Not needed
-		print("Teleport Count is " .. TeleportCount .. " - Client")
-		if TeleportCount == 9999 then
-			print("No more teleport. Limit is: " .. TeleportCount .. " - Client")
-			CanTeleport = false
-		end
-	end
-end)
--- New Character function
-local function onCharacterAdded(char)
-	character = char
-	HRP = char:WaitForChild("HumanoidRootPart")
+	end)
+else
+	warn("Something Went wrong. couldnt load mobile, try loading script again")
+	TitleTP:Destroy()
+	ScreenMobile:Destroy()
+	Sound:Destroy()
+	Sound2:Destroy()
+	Sound3:Destroy()
+	Sound4:Destroy()
+	print("ScreenGui unloaded, sounds unloaded.")
 end
--- sets new Charatcer
-if player.Character then
-	onCharacterAdded(player.Character)
-end
-player.CharacterAdded:Connect(onCharacterAdded)
--- End :)

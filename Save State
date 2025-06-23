@@ -1,6 +1,6 @@
 -- Save State script
--- Update v2
 -- Mobile Friendly
+-- VUpdate v3
 wait(2)
 -- Character finding Varibles
 local Players = game:GetService("Players")
@@ -51,7 +51,7 @@ TitleTP.Size = UDim2.new(1,0,0.05,0)
 TitleTP.Position = UDim2.new(0,0,-0.08,0)
 TitleTP.Parent = ScreenMobile
 TitleTP.BackgroundTransparency = 0.3
-TitleTP.BorderSizePixel = 0
+TitleTP.BorderSizePixel = 6
 TitleTP.Text = "Save state script!!11!! (Dont spam!!1!)"
 TitleTP.TextScaled = true
 task.delay(1, function()
@@ -68,7 +68,7 @@ end
 if game.UserInputService.KeyboardEnabled and game.UserInputService.MouseEnabled and not game.UserInputService.TouchEnabled then
 	task.spawn(function()
 		while task.wait(0.0001) do
-			print("The loop started")
+			print("The loop started - Pc")
 			if character.Humanoid.Health == 0 then
 				-- sets new Charatcer
 				if player.Character then
@@ -132,6 +132,24 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	FrameTpcorner.Thickness = 6
 	FrameTpcorner.LineJoinMode = Enum.LineJoinMode.Bevel
 	game.TweenService:Create(FrameTp, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Position = FrameTp.Position + UDim2.new(-0.19,0,0,0)}):Play()
+	-- The open and clsoe button at bottom right
+	local Close_OpenButton = Instance.new("TextButton")
+	Close_OpenButton.Transparency = 1
+	Close_OpenButton.Text = "Open and Close Button"
+	Close_OpenButton.TextScaled = true
+	task.delay(0.5, function()
+		game.TweenService:Create(Close_OpenButton, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
+		game.TweenService:Create(Close_OpenButton, TweenInfo.new(2.5, Enum.EasingStyle.Exponential), {Position = Close_OpenButton.Position + UDim2.new(-0.101,0,0,0)}):Play()
+	end)
+	Close_OpenButton.Parent = ScreenMobile
+	Close_OpenButton.Size = UDim2.new(0.1,0,0.1)
+	Close_OpenButton.Position = UDim2.new(1,0,0.9,0)
+	Close_OpenButton.BorderSizePixel = 6
+	task.delay(2.5, function()
+		Close_OpenButton.MouseButton1Click:Connect(function()
+			FrameTp.Visible = not FrameTp.Visible
+		end)
+	end)
 	-- Saving State button
 	local SaveMobile = Instance.new("TextButton")
 	SaveMobile.Parent = FrameTp
@@ -185,6 +203,10 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 		-- Teleport State Buttom
 		SaveMobile2.MouseButton1Click:Connect(function()
 			-- State teleporter function
+			if HRP.Anchored == true then
+				print("No")
+			end
+			Sound:Play()
 			character:PivotTo(CFrame.new(Save_State_Part.Position + Vector3.new(0,3.99,0)))
 			Save_State_Part.Parent = nil
 			Save_State_Part:Destroy()

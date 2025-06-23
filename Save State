@@ -1,6 +1,6 @@
 -- Save State script
 -- Mobile Friendly
--- update v5
+-- Update v6
 wait(2)
 -- Character finding Varibles
 local Players = game:GetService("Players")
@@ -125,6 +125,8 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	FrameTp.Size = UDim2.new(0.3,0,0.3,0)
 	FrameTp.Position = UDim2.new(1,0,0.23,0)
 	FrameTp.BackgroundColor = BrickColor.new("Ghost grey")
+	local FrameTPround = Instance.new("UICorner")
+	FrameTPround.Parent = FrameTp
 	task.delay(0.2, function()
 		task.spawn(function()
 			while task.wait(1) do
@@ -139,26 +141,44 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	FrameTpcorner.Parent = FrameTp
 	FrameTpcorner.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	FrameTpcorner.Thickness = 6
-	FrameTpcorner.LineJoinMode = Enum.LineJoinMode.Bevel
 	game.TweenService:Create(FrameTp, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Position = FrameTp.Position + UDim2.new(-0.19,0,0,0)}):Play()
 	-- The open and clsoe button at bottom right
 	local Close_OpenButton = Instance.new("TextButton")
 	Close_OpenButton.Transparency = 1
 	Close_OpenButton.Text = "Open and Close Button"
 	Close_OpenButton.TextScaled = true
+	Close_OpenButton.TextStrokeTransparency = 0
 	task.delay(0.5, function()
 		game.TweenService:Create(Close_OpenButton, TweenInfo.new(2, Enum.EasingStyle.Exponential), {Transparency = 0}):Play()
-		game.TweenService:Create(Close_OpenButton, TweenInfo.new(2.5, Enum.EasingStyle.Exponential), {Position = Close_OpenButton.Position + UDim2.new(-0.101,0,0,0)}):Play()
+		game.TweenService:Create(Close_OpenButton, TweenInfo.new(2.5, Enum.EasingStyle.Exponential), {Position = Close_OpenButton.Position + UDim2.new(-0.301,0,0,0)}):Play()
 	end)
 	Close_OpenButton.Parent = ScreenMobile
 	Close_OpenButton.Size = UDim2.new(0.1,0,0.1)
-	Close_OpenButton.Position = UDim2.new(1,0,0.9,0)
+	Close_OpenButton.Position = UDim2.new(1.2,0,0.9,0)
 	Close_OpenButton.BorderSizePixel = 6
+	Close_OpenButton.TextColor = BrickColor.new("Ghost grey")
+	local CTP2 = Instance.new("UIStroke")
+	CTP2.Parent = Close_OpenButton
+	CTP2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	CTP2.Thickness = 6
+	CTP2.Color = Color3.fromRGB(0, 0, 0)
+	FrameTp.BackgroundColor = BrickColor.new("Black metallic")
 	task.delay(2.5, function()
 		Close_OpenButton.MouseButton1Click:Connect(function()
 			FrameTp.Visible = not FrameTp.Visible
 		end)
 	end)
+	task.delay(0.2, function()
+		task.spawn(function()
+			while task.wait(1) do
+				Close_OpenButton.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+				wait(1)
+				Close_OpenButton.BackgroundColor3 = Color3.fromRGB(188, 188, 188)
+			end
+		end)
+	end)
+	local FrameTProun = Instance.new("UICorner")
+	FrameTProun.Parent = Close_OpenButton
 	-- Saving State button
 	local SaveMobile = Instance.new("TextButton")
 	SaveMobile.Parent = FrameTp
@@ -174,7 +194,8 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	SaveMobileCorner.Parent = SaveMobile
 	SaveMobileCorner.Thickness = 6
 	SaveMobileCorner.ApplyStrokeMode =Enum.ApplyStrokeMode.Border
-	SaveMobileCorner.LineJoinMode = Enum.LineJoinMode.Bevel
+	local FrameTProu = Instance.new("UICorner")
+	FrameTProu.Parent = SaveMobile
 	-- Teleporting to saved state button
 	local SaveMobile2 = Instance.new("TextButton")
 	SaveMobile2.Parent = FrameTp
@@ -190,7 +211,8 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	SaveMobileCorner2.Parent = SaveMobile2
 	SaveMobileCorner2.Thickness = 6
 	SaveMobileCorner2.ApplyStrokeMode =Enum.ApplyStrokeMode.Border
-	SaveMobileCorner2.LineJoinMode = Enum.LineJoinMode.Bevel
+	local FrameTPro = Instance.new("UICorner")
+	FrameTPro.Parent = SaveMobile2
 	-- Save State button
 	SaveMobile.MouseButton1Click:Connect(function()
 		Saved_Stated = true

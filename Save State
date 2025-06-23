@@ -1,6 +1,6 @@
 -- Save State script
 -- Mobile Friendly
--- Update v4
+-- update v5
 wait(2)
 -- Character finding Varibles
 local Players = game:GetService("Players")
@@ -124,12 +124,15 @@ elseif not game.UserInputService.KeyboardEnabled and not game.UserInputService.M
 	FrameTp.Parent = ScreenMobile
 	FrameTp.Size = UDim2.new(0.3,0,0.3,0)
 	FrameTp.Position = UDim2.new(1,0,0.23,0)
-	task.spawn(function()
-		while task.wait(1) do
-			FrameTp.BackgroundColor3 = Color3.fromRGB(188, 188, 188)
-			wait(1)
-			FrameTp.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
-		end
+	FrameTp.BackgroundColor = BrickColor.new("Ghost grey")
+	task.delay(0.2, function()
+		task.spawn(function()
+			while task.wait(1) do
+				FrameTp.BackgroundColor3 = Color3.fromRGB(188, 188, 188)
+				wait(1)
+				FrameTp.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+			end
+		end)
 	end)
 	FrameTp.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	local FrameTpcorner = Instance.new("UIStroke")

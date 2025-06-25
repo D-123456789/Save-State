@@ -549,7 +549,6 @@ PasswordCheckButton.MouseButton1Click:Connect(function()
 			end)
 			task.spawn(function()
 				while task.wait(0.0001) do
-					print("The check loop started - Mobile")
 					if character.Humanoid.Health == 0 then
 						-- sets new Charatcer
 						if player.Character then
